@@ -46,6 +46,9 @@
         //contador do REC
         int count = 0;
 
+        // remover
+        System.out.println("REMOVER");
+
 
 
         
