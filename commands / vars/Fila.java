@@ -1,8 +1,7 @@
-<@453601756446851073> 
 /* 1° Beatriz Silva Nobrega - 10435789
- * 2° Eduardo Kenji Hernandes Ikematu - 10439924
- * 3° Matheus Guion - 10437693
- */
+2° Eduardo Kenji Hernandes Ikematu - 10439924
+3° Matheus Guion - 10437693
+*/
 
 package commands.vars;
 
