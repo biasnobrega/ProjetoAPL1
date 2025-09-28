@@ -46,6 +46,126 @@
         //contador do REC
         int count = 0;
 
+         while (valor) {
+
+            /* Condicional para caso o play seja ativado */
+            if (play) {
+                if (!rec.qIsEmpty()) {
+                    opcao = rec.dequeue();
+                } else {
+                    System.out.println("Reprodução finalizada...");
+                    play = false;
+                    continue;
+                }
+            }
+
+            // Após o play finalizar, o programa espera para o usuário digitar novamente
+            else {
+                String user = scanner.nextLine();
+                // Deixa tudo em letra Maiúscula
+                user = user.toUpperCase();
+                opcao = user;
+                // Remove todos os espaços
+                opcao = opcao.replaceAll("\\s", "");
+            }
+
+            // Opção VARS
+            if (opcao.equals("VARS")){
+
+                // Se a lista de variáveis estiver vazia imprime que não foi definida nenhuma variável
+                if (vars.arrayEmpty()) {
+                    System.out.println("Nenhuma variável definida.");
+                    continue;
+                }
+
+                else {
+                    // Usa loop for e vai imprimindo cada variável com seu respectivo valor até o momento que ele
+                    // encontrar um null
+                    for (int i = 0; i < 15; i++) {
+                        if (vars.seeElement(i) != null) {
+                            System.out.println(vars.seeElement(i) + " = " + valores.seeElement(i));
+                        };
+                    }
+                    continue;
+                }
+
+            }
+
+
+            //Opcao de RESET
+            else if (opcao.equals("RESET")) {
+
+                // Loop para remover todos os elementos
+                for (int i = 0; i < 10; i++) {
+                    vars.removeElement(i);
+                    valores.removeElement(i);
+                }
+
+                // Reinicia as posições dos objetos vars e valores
+                vars.setPosicao(0);
+                valores.setPosicao(0);
+                System.out.println("Variáveis reiniciadas.");
+                continue;
+            }
+
+            // Opção REC
+            else if (opcao.equals("REC")){
+
+                // Verifica se o rec está vazio
+                if (rec.qIsEmpty()) {
+                    System.out.println("Iniciando gravação... (REC: 0/10)");
+                }
+                // Caso não esteja, continua a gravação
+                else {
+                    System.out.println("Continuando gravação... (REC: " + count + "/10)");
+                }
+                boolean recLoop = true;
+
+                while (recLoop) {
+                    if (count != 10) {
+                         // Inicia o Scanner
+                        Scanner REC = new Scanner(System.in);
+
+                        // Armazena a string em word
+                        String word = REC.nextLine();
+
+                        // Transforma a string para maiusculo
+                        word = word.toUpperCase();
+
+                        // Armazena em element a string word
+                        String element = word;
+
+                        // Retira todos os espaçoes de element
+                        element = element.replaceAll("\\s", "");
+
+                        // Para a gravação
+                        if (element.equals("STOP")) {
+                            System.out.println("Encerrando gravação... (REC: " + count + "/10)");
+                            break;
+                        }
+
+                        // Caso não seja STOP, verifica se é um dos comandos proibidos
+                        else if (element.equals("PLAY") || element.equals("ERASE") || element.equals("REC")  ) {
+                            System.out.println("Erro: comando inválido para gravação");
+                        }
+
+                        // Se passar pelas condicionais, apenas adiciona no array e aumenta o contador
+                        else {
+                            count++;
+                            System.out.println("(REC: " + count + "/10) " + word);
+                            rec.enqueue(element);
+                        }
+                    }
+
+                    // Se o rec estiver cheio, ele para a gravação
+                    else {
+                        System.out.println("REC CHEIO");
+                        System.out.println("Encerrando gravação");
+                        break;
+                    }
+                } continue;
+            }
+
         // remover
         System.out.println("REMOVER");
 
