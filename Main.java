@@ -174,6 +174,7 @@
         
     }
  }
+ 
             // Opção STOP (como não está dentro do rec, imprime que não tem gravação)
             else if (opcao.equals("STOP")){
                 System.out.println("Não há gravação para ser encerrada");
@@ -217,4 +218,67 @@
             else if (opcao.equals("EXIT")){
                 System.out.println("Programa Encerrado");
                 break;
+            }
+
+             // Ver valor de UMA variável
+            else if (opcao.length() == 1 && Character.isLetter(opcao.charAt(0))) {
+                if (vars.searchElement(opcao.charAt(0))) {
+                    int pos = vars.elementPosition(opcao.charAt(0));
+                    System.out.println(valores.seeElement(pos));
+                } else {
+                    System.out.println("Variável não definida");
+                } continue;
+            }
+
+
+            //Opcao VAR = VALUE
+            else if (opcao.charAt(0) >= 'A' && opcao.charAt(0) <= 'Z') {
+
+                // Caso o segundo caractere seja " = "
+                if (opcao.charAt(1) == '=') {
+
+                    // Verifica se o 2 caractere é um numero
+                    if (Character.isDigit(opcao.charAt(2))) {
+
+                        // Inicia uma string numero (possibilita armazenar numeros maiores que 9)
+                        String numero = "";
+
+                        // Adiciona na string o numero que estiver na posição 2 da opcao
+                        numero += opcao.charAt(2);
+
+                        // Adiciona o resto dos numeros dentro da string
+                        for (int j = 3; j < opcao.length(); j++) {
+                            numero += opcao.charAt(j);
+                        }
+
+                        // Percorre a lista vars para ver se o caractere já existe
+                        if (vars.searchElement(opcao.charAt(0))) {
+
+                            // Caso encontre a variável, guarda sua posição
+                            int pos = vars.elementPosition(opcao.charAt(0));
+
+                            // Pega o valor numérico da string
+                            valores.changeElement(pos, Integer.parseInt(numero));
+
+                            // Imprime o que o usuário digitou
+                            System.out.println(opcao);
+
+                            continue;
+
+                        } else {
+
+                            // Caso não encontre a variável já definida na lista
+                            // Adiciona a variável na lista
+                            vars.addElement(opcao.charAt(0));
+
+                            // Adiciona o valor numérico na lista dos números
+                            valores.addElement(Integer.parseInt(numero));
+
+                            // Imprime o que o usuário digitou
+                            System.out.println(opcao);
+                            continue;
+                        }
+
+                    } else { System.out.print("Erro comando inválido"); }
+                }
             }
