@@ -1,6 +1,13 @@
 /* Beatriz Silva Nóbrega - 10435789
  * Eduardo Kenji Hernandes Ikematu - 10439924
  * Matheus Guion - 10437693
+ * 
+ * Referencias Utilizadas:
+Como ver se um caractere é um numero
+    https://stackoverflow.com/questions/4047808/what-is-the-best-way-to-tell-if-a-character-is-a-letter-or-number-in-java-withou
+Como transformar caractere em inteiro, mostrando o valor numerico e não em ASCII
+https://www.scaler.com/topics/char-to-int-in-java/
+ 
  */
 
  import java.util.Scanner;
@@ -166,14 +173,12 @@
                 } continue;
             }
 
-        // remover
-        System.out.println("REMOVER");
 
-       
+  
 
         
-    }
- }
+    
+ 
  
             // Opção STOP (como não está dentro do rec, imprime que não tem gravação)
             else if (opcao.equals("STOP")){
