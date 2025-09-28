@@ -428,3 +428,202 @@
                             pilha.push(simbolo);
                         } catch (Exception ignored) { }
                     }
+
+                    //Verifica se o simbolo é + ou -
+                    else if (simbolo == '+' || simbolo == '-') {
+                        try {
+
+                            // Verifica se o topo da pilha contém um parêntese aberto '(' ou fechado ')'
+                            if (pilha.topo() == '(' || pilha.topo() == ')') {
+                                // Se for o caso, simplesmente empilha o operador atual
+                                pilha.push(simbolo);
+
+                            } else {
+                                // Caso contrário, desempilha o topo e adiciona à saída antes de empilhar o novo operador
+                                saida += pilha.pop();
+                                pilha.push(simbolo);
+                            }
+                        } catch (Exception ignored) { }
+                    }
+
+                    // Se o símbolo for '*' ou '/'
+                    else if (simbolo == '*' || simbolo == '/') {
+                        try {
+                            // Se o topo da pilha não for '*', '/' ou '^', desempilha o operador para a saída
+                            if (pilha.topo() != '*' || pilha.topo() != '/' || pilha.topo() != '^') {
+                                saida += pilha.pop();
+                                pilha.push(simbolo);
+
+                            } else {
+                                // Caso contrário, apenas empilha o operador
+                                pilha.push(simbolo);
+
+                            }
+                        } catch (Exception ignored) { }  // Captura exceções, mas as ignora
+                    }
+
+                    // Se o símbolo for '^' (exponenciação)
+                    else if (simbolo == '^') {
+                        try {
+                            // Se o topo da pilha não for '^', empilha o operador
+                            if (pilha.topo() != '^') {
+                                pilha.push(simbolo);
+                            } else {
+                                // Caso contrário, desempilha o operador e depois empilha o novo
+                                saida += pilha.pop();
+                                pilha.push(simbolo);
+                            }
+                        } catch (Exception ignored) { }
+                    }
+                }
+
+                // Caso tenha dado erro na expressão infixa, se mostra a mensagem de erro
+                if (infixaErro) {
+                    System.out.println("Erro na expressão infixa!");
+                    infixaErro = false;
+                    continue;
+                }
+
+
+                // CÁLCULO DAS EXPRESSÕES POSFIXAS
+                if (posFixa) {
+
+                    // Booleano utilizado para validar se alguma variável não está definida e não mostrar o resultado
+                    boolean erroVar = false;
+
+                    // Resultado vai armazenar a operação entre o valor 1 e o valor 2
+                    int resultado = 0, valor1, valor2;
+
+                    // Vai percorrer cada caractere da saida adquirida na expressão posfixa
+                    for (int i = 0; i < saida.length(); i++){
+
+                        // Armazena o caractere atual na variável caractere
+                        char caractere = saida.charAt(i);
+
+                        // Verifica se o caractere da saida é uma letra
+                        if (Character.isLetter(caractere)) {
+                            // Verifica se o caractere existe na lista
+                            if (vars.searchElement(caractere)) {
+                                try {
+                                    // Se existir, adiciona seu valor na pilha
+                                    int pos = vars.elementPosition(caractere);
+                                    pilhaPosfixa.push(valores.seeElement(pos));
+
+                                } catch (Exception ignored)  {}
+                            }
+
+                            // Se não existir imprime que a variável não foi definida
+                            else {
+                                erroVar = true;
+                                System.out.println("Erro: variável " + caractere + " não definida");
+                            }
+                        }
+
+                        // Verifica se o caractere é +
+                        else if (caractere == '+') {
+                            try {
+
+                                valor1 = pilhaPosfixa.pop();
+
+                                valor2 = pilhaPosfixa.pop();
+
+                                resultado = valor1 + valor2;
+
+                                pilhaPosfixa.push(resultado);
+                            } catch (Exception ignored) {}
+                        }
+
+                        // Verifica se o caractere é -
+                        else if (caractere == '-') {
+                            try {
+
+                                valor1 = pilhaPosfixa.pop();
+
+                                valor2 = pilhaPosfixa.pop();
+
+                                resultado = valor2 - valor1;
+
+                                pilhaPosfixa.push(resultado);
+                            } catch (Exception ignored) {}
+                        }
+
+                        // Verifica se o caractere é *
+                        else if (caractere == '*') {
+                            try {
+
+                                valor1 = pilhaPosfixa.pop();
+
+                                valor2 = pilhaPosfixa.pop();
+
+                                resultado = valor1 * valor2;
+
+                                pilhaPosfixa.push(resultado);
+                            } catch (Exception ignored) {}
+                        }
+
+                        // Verifica se o caractere é /
+                        else if (caractere == '/') {
+                            try {
+
+                                valor1 = pilhaPosfixa.pop();
+
+                                valor2 = pilhaPosfixa.pop();
+
+                                if  (valor1 == 0) {
+                                    System.out.println("Não pode fazer divisões por zero!");
+                                    saida = "";
+                                    break;
+                                } else {
+                                    resultado = valor2 / valor1;
+
+                                    pilhaPosfixa.push(resultado);
+                                }
+                            } catch (Exception ignored) {}
+                        }
+
+                        // Verifica se o caractere é ^
+                        else if (caractere == '^') {
+                            try {
+
+                                valor1 = pilhaPosfixa.pop();
+
+                                valor2 = pilhaPosfixa.pop();
+
+                                resultado = 1;
+                                for (int j = 1; j <= valor1; j++) {
+                                    resultado *= valor2;
+                                }
+                                pilhaPosfixa.push(resultado);
+                            } catch (Exception ignored) {}
+                        }
+
+
+
+                        // Ao percorrer toda a saida e não tiver mais que operar nada, se imprime o resultado
+                        if (i == saida.length() - 1) {
+
+                            // Se tiver alguma variável não definida apenas não imprime o resultado e sai do loop
+                            if (erroVar) {
+                                saida = "";
+                                break;
+                            }
+
+                            // Caso contrário, imprime o resultado e sai do loop
+                            else {
+                                System.out.println(resultado);
+                                saida = "";
+                                break;
+                            }
+                        }
+
+                    }
+                }
+                INFIXA = false;
+            }
+            else {System.out.println("Erro: comando inválido");}
+
+        }
+        scanner.close();
+    }
+}
+
