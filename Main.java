@@ -174,3 +174,47 @@
         
     }
  }
+            // Opção STOP (como não está dentro do rec, imprime que não tem gravação)
+            else if (opcao.equals("STOP")){
+                System.out.println("Não há gravação para ser encerrada");
+            }
+
+            // Opção PLAY
+            else if (opcao.equals("PLAY")){
+
+                // Se rec estiver com algum elemento, começa a reprodução colocando o valor play em true
+                if (!rec.qIsEmpty()) {
+                    System.out.println("Reproduzindo gravação...");
+                    play = true;
+                }
+
+                // Caso contrário, imprime que não há gravação para ser reproduzida
+                else {
+                    System.out.println("Não há gravação para ser reproduzida");
+                }
+                continue;
+            }
+
+
+            // Opção ERASE
+            else if (opcao.equals("ERASE")){
+
+                // Enquanto a fila rec estiver vazia, elimina os elementos
+                while (!rec.qIsEmpty()) {
+                    rec.dequeue();
+                }
+
+                // Reinicia a primeira e ultima posição do objeto rec
+                rec.setPriposicao(0);
+                rec.setUltposicao(0);
+                System.out.println("Gravação apagada.");
+                count = 0; // Reinicia o contador
+                continue;
+            }
+
+
+            //Opcao de EXIT
+            else if (opcao.equals("EXIT")){
+                System.out.println("Programa Encerrado");
+                break;
+            }
