@@ -17,8 +17,8 @@ https://www.scaler.com/topics/char-to-int-in-java/
     public static void main(String[] args) {
 
         //criamos 2 listas e 1 fila para armanezar valores , variáveis e o REC 
+        Array<Character> vars = new Array<>();
         Array<Integer> valores = new Array<>();
-        Array<Character> variaveis = new Array<>();
         Fila<String> rec = new Fila<>();
 
         //criamos uma pilhas para armanezar as expressões matemáticas infixas
