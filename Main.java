@@ -282,3 +282,149 @@
                     } else { System.out.print("Erro comando inválido"); }
                 }
             }
+
+             // Verifica se a opcao se trata de uma expressão infixa, procurando por operadores
+            for (int i = 0; i < opcao.length(); i++) {
+
+                // Caso encontre algum, declara INFIXA como true
+                if (opcao.charAt(i) == '+' || opcao.charAt(i) == '-' || opcao.charAt(i) == '/' || opcao.charAt(i) == '*' || opcao.charAt(i) == '^' || opcao.charAt(i) == '(' || opcao.charAt(i) == ')') {
+                    INFIXA = true;
+                }
+
+                // Se encontrar algum elemento que não seja algum dos operadores
+                else if (!Character.isLetterOrDigit(opcao.charAt(i))) {
+
+                    // Verifica se está no play
+                    if (play) {
+                        System.out.println(opcao);
+                    }
+
+                    // Imprime operador invalido
+                    System.out.println("Erro: operador inválido");
+                    operadorInvalido = true;
+                    INFIXA=true;
+                    break;}
+            }
+
+            if (INFIXA) {
+
+                // Se tiver um operador invalido não permite calcular a expressão
+                if (operadorInvalido) {
+                    operadorInvalido = false;
+                    continue;
+                }
+
+                // Caso esteja em play imprime a expressão
+                if (play) {
+                    System.out.println(opcao);
+                }
+
+                // Contadores para verificar ( )
+                int contadorAbre = 0, contadorFecha = 0;
+
+                // Conta quantas ( e ) existem e caso seja um valor diferente não permite ser calculado
+                for (int i = 0; i < opcao.length(); i++) {
+                    if (opcao.charAt(i) == '(') {
+                        contadorAbre += 1;
+                    }
+                    else if (opcao.charAt(i) == ')') {
+                        contadorFecha += 1;
+                    }
+                }
+                if (contadorAbre != contadorFecha) {
+                    System.out.println("Erro: expressão inválida");
+                    INFIXA = false;
+                    continue;
+                }
+
+                //Opcao expressao matematica infixa transformando para posfixa
+                for (int i = 0; i <= opcao.length(); i++) {
+
+                    char simbolo = opcao.charAt(i);
+
+                    // Verifica se já está no final da opcao
+                    if (i == (opcao.length() - 1) ) {
+
+                        // Se tiver verifica se o caractere atual é uma letra e adiciona ele
+                        if (Character.isLetter(simbolo)) {
+                            saida += simbolo;
+                        }
+
+                        if (simbolo == ')') {
+                            try {
+                                while (!pilha.isEmpty() && pilha.topo() != '(') {
+                                    saida += pilha.pop();
+                                }
+                                pilha.pop();
+                            } catch (Exception ignored) { }
+                        }
+
+                        // Esvazia toda a pilha
+                        while(!pilha.isEmpty()) {
+                            try {
+                                saida += pilha.pop();
+                            } catch (Exception ignored) { }
+                        }
+
+                        // Se deu erro na expressão infixa, a expressão não vai para o calculo e a saida reinicia
+                        if (infixaErro) {
+                            saida = "";
+                            posFixa = false;
+                            break;
+                        }
+                        // Caso não de erro, a expressão será direcionada para o calculo
+                        else {
+                            posFixa = true;
+                            break;
+                        }
+                    }
+
+                    //Verifica se a expressao esta correta; ex: x - TESTE
+                    else if (Character.isLetter(simbolo)) {
+                        if (i + 1 < opcao.length() && Character.isLetter(opcao.charAt(i + 1))) {
+                            System.out.println("Erro: expressão inválida.");
+                            posFixa = false;
+                            saida = "";
+                            while (!pilha.isEmpty()) {
+                                try {
+                                    pilha.pop();
+                                } catch (Exception ignored) {}
+                            }
+                            break;
+                        } else {
+                            saida += simbolo;
+                        }
+                    }
+
+                    //Verifica se tem numeros na expressao infixa
+                    else if (Character.isDigit(simbolo)) {
+                        System.out.println("Erro: não deve ter números na expressão infixa");
+                        infixaErro = true;
+                        break;
+                    }
+
+                    //Verifica se é um (, se for coloca na pilha
+                    else if (simbolo == '(') {
+                        try {
+                            pilha.push(simbolo);
+                        } catch (Exception ignored) { }
+                    }
+
+                    //Verifica se é um (, se fore ele coloca na saida tudo ate o ) e depois o tira da pilha
+                    else if (simbolo == ')') {
+                        try {
+                            while (!pilha.isEmpty() && pilha.topo() != '(') {
+                                saida += pilha.pop();
+                            }
+                            pilha.pop();
+
+
+                        } catch (Exception ignored) { }
+                    }
+
+                    //Se a pilha estiver vazia coloca o primeiro operador
+                    else if (pilha.isEmpty()) {
+                        try {
+                            pilha.push(simbolo);
+                        } catch (Exception ignored) { }
+                    }
